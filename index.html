@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jo's Corner</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script>
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on("init", function(user) {
@@ -16,6 +16,7 @@
     });
   }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -184,6 +185,22 @@ nav {
   font-size: .75rem; color: #8C6A55;
 }
 
+/* LOADING / EMPTY STATES */
+.loading-msg {
+  grid-column: 1/-1; text-align: center;
+  padding: 3rem 1rem; color: #8C6A55; font-size: .95rem;
+  font-style: italic;
+}
+.empty-msg {
+  grid-column: 1/-1; text-align: center;
+  padding: 3rem 1rem;
+}
+.empty-msg h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; margin-bottom: .5rem; color: #382318;
+}
+.empty-msg p { font-size: .9rem; color: #8C6A55; }
+
 /* SINGLE POST */
 .post-wrap { max-width: 720px; margin: 0 auto; padding: 3rem 2rem 5rem; }
 .post-back {
@@ -209,15 +226,22 @@ nav {
 }
 .post-body { font-size: 1.03rem; line-height: 1.85; }
 .post-body p { margin-bottom: 1.3rem; }
-.post-body h3 {
-  font-family: 'Playfair Display', serif; font-size: 1.2rem;
-  font-weight: 600; margin: 1.8rem 0 .7rem; color: #382318;
+.post-body h1, .post-body h2, .post-body h3 {
+  font-family: 'Playfair Display', serif; font-weight: 600;
+  margin: 1.8rem 0 .7rem; color: #382318;
 }
+.post-body h1 { font-size: 1.5rem; }
+.post-body h2 { font-size: 1.3rem; }
+.post-body h3 { font-size: 1.15rem; }
 .post-body blockquote {
   border-left: 3px solid #B85530; margin: 1.8rem 0;
   padding: .7rem 1.4rem; background: rgba(184,85,48,.04);
   border-radius: 0 8px 8px 0; font-style: italic; color: #5C3D2A;
 }
+.post-body ul, .post-body ol { margin: 0 0 1.3rem 1.5rem; }
+.post-body li { margin-bottom: .3rem; }
+.post-body strong { color: #382318; }
+.post-body a { color: #B85530; }
 
 /* COMMENTS */
 .comments-wrap {
@@ -360,7 +384,7 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
 </head>
 <body>
 
-<!-- Netlify form detection (hidden, required) -->
+<!-- Netlify form detection -->
 <div hidden>
   <form name="newsletter-signup" netlify netlify-honeypot="bot-field">
     <input name="bot-field"><input name="name"><input name="email" type="email">
@@ -407,9 +431,8 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
 
 <main>
 
-<!-- ═══════════════════════════ HOME ═══════════════════════════ -->
+<!-- HOME -->
 <div id="page-home" class="page active">
-
   <div class="hero">
     <div class="hero-text">
       <h2>A warm little <em>corner</em><br>of the internet</h2>
@@ -442,8 +465,6 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
         <line x1="130" y1="248" x2="136" y2="263" stroke="#D4A853" stroke-width="4.5" stroke-linecap="round"/>
         <path d="M98 263 L103 263 M103 263 L100 268 M103 263 L107 268" stroke="#D4A853" stroke-width="2" stroke-linecap="round"/>
         <path d="M132 263 L137 263 M137 263 L134 268 M137 263 L141 268" stroke="#D4A853" stroke-width="2" stroke-linecap="round"/>
-        <path d="M90 178 Q105 170 120 175" stroke="#8C3A18" stroke-width="1" fill="none" opacity=".5"/>
-        <path d="M94 193 Q109 185 124 190" stroke="#8C3A18" stroke-width="1" fill="none" opacity=".4"/>
       </svg>
     </div>
   </div>
@@ -454,7 +475,9 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
     <h3>Latest from <span>The Corner</span></h3>
     <a onclick="nav('newsletter')">See all issues &rarr;</a>
   </div>
-  <div class="post-grid" id="home-grid"></div>
+  <div class="post-grid" id="home-grid">
+    <div class="loading-msg">Loading posts...</div>
+  </div>
 
   <div class="signup-strip">
     <div class="signup-inner">
@@ -471,10 +494,9 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
       <p id="home-ok" style="display:none;color:#E4B85A;margin-top:1rem;font-size:.9rem;">You are in! Welcome to the flock.</p>
     </div>
   </div>
+</div>
 
-</div><!-- /home -->
-
-<!-- ═══════════════════════════ NEWSLETTER ═══════════════════════════ -->
+<!-- NEWSLETTER -->
 <div id="page-newsletter" class="page">
   <div class="sec-head" style="padding-top:3rem;">
     <div>
@@ -482,10 +504,12 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
       <p style="font-size:.86rem;color:#8C6A55;margin-top:.25rem;">Every issue, a little letter from Jo's corner of the world.</p>
     </div>
   </div>
-  <div class="post-grid" id="all-grid"></div>
+  <div class="post-grid" id="all-grid">
+    <div class="loading-msg">Loading posts...</div>
+  </div>
 </div>
 
-<!-- ═══════════════════════════ POST ═══════════════════════════ -->
+<!-- SINGLE POST -->
 <div id="page-post" class="page">
   <div class="post-wrap">
     <a class="post-back" onclick="nav('newsletter')">&larr; Back to all issues</a>
@@ -494,14 +518,13 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
       <h3>Leave a comment</h3>
       <div class="giscus-note">
         <p><strong>Comments are powered by Giscus</strong> (free, no ads, GitHub-based).</p>
-        <p style="margin-top:.5rem;">To activate comments on your live site, visit <strong>giscus.app</strong>, connect your GitHub repo, then replace the placeholder values in the <code>data-repo</code> and <code>data-repo-id</code> lines in the HTML file.</p>
+        <p style="margin-top:.5rem;">To activate comments, visit <strong>giscus.app</strong>, connect your GitHub repo, then replace the placeholder values in the <code>data-repo</code> line in the HTML file.</p>
       </div>
       <div id="giscus-wrap" style="margin-top:1.2rem;">
-        <!-- Replace these placeholder values with your own from giscus.app -->
         <script src="https://giscus.app/client.js"
-          data-repo="YOUR-USERNAME/jos-corner"
+          data-repo="chris52085-netizen/Jo-s-Corner"
           data-repo-id="YOUR_REPO_ID"
-          data-category="Comments"
+          data-category="General"
           data-category-id="YOUR_CATEGORY_ID"
           data-mapping="pathname"
           data-strict="0"
@@ -514,14 +537,14 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
           async>
         </script>
         <p style="font-size:.78rem;color:#8C6A55;text-align:center;padding:.9rem;background:#EAE0D0;border-radius:8px;">
-          Comments will appear here once Giscus is configured with your GitHub repo.
+          Comments will appear here once Giscus is configured.
         </p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════ SUBMIT ═══════════════════════════ -->
+<!-- SUBMIT -->
 <div id="page-submit" class="page">
   <div class="form-page">
     <h2>Submit a Story</h2>
@@ -560,12 +583,11 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
         <div class="fg">
           <label>Short pitch <span class="req">*</span></label>
           <textarea name="pitch" rows="3" placeholder="A sentence or two about what your piece is about..." required></textarea>
-          <p class="fhint">Keep it brief, 2 to 3 sentences is perfect.</p>
+          <p class="fhint">2 to 3 sentences is perfect.</p>
         </div>
         <div class="fg">
           <label>Your article <span class="req">*</span></label>
           <textarea name="article" style="min-height:200px;" placeholder="Paste your full article here. Rough drafts welcome!" required></textarea>
-          <p class="fhint">Aim for 300 to 900 words.</p>
         </div>
         <div style="margin-top:1.8rem;">
           <button type="submit" class="btn btn-sage" style="width:100%;justify-content:center;padding:12px;">Send my story</button>
@@ -573,13 +595,10 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
       </form>
       <div class="success-box" id="sub-ok">Your story has been sent! Jo will be in touch. Thank you for sharing.</div>
     </div>
-    <p style="font-size:.8rem;color:#8C6A55;text-align:center;margin-top:1.2rem;">
-      Submissions reviewed within 2 to 3 weeks. By submitting you agree to let Jo share your piece in the newsletter, with credit to you.
-    </p>
   </div>
 </div>
 
-<!-- ═══════════════════════════ SUBSCRIBE ═══════════════════════════ -->
+<!-- SUBSCRIBE -->
 <div id="page-subscribe" class="page">
   <div class="sub-hero">
     <div style="font-size:2.8rem;margin-bottom:.9rem;">&#x1F413;</div>
@@ -605,7 +624,7 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
           <button type="submit" class="btn btn-terra" style="width:100%;justify-content:center;padding:12px;">Subscribe, it is free</button>
         </div>
       </form>
-      <div class="success-box" id="big-sub-ok">You are on the list! Check your inbox for a welcome note. Welcome to the flock!</div>
+      <div class="success-box" id="big-sub-ok">You are on the list! Welcome to the flock!</div>
     </div>
     <div class="sub-cards">
       <div class="sub-card">
@@ -661,123 +680,150 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
 </footer>
 
 <script>
-var posts = [
-  {
-    id: 1,
-    title: "Spring Is Here and the Girls Are Laying Again",
-    date: "May 4, 2026",
-    issue: "Issue No. 12",
-    tag: "Backyard Chickens",
-    tagClass: "tag-chicken",
-    bg: "#EDD5B8",
-    excerpt: "After a long quiet winter, the egg basket is full again. Maple, Clover, and Biscuit have come back to life in the best possible way.",
-    paragraphs: [
-      "The egg basket has been sitting on the counter mostly for decoration since November. Maple decided sometime around the winter solstice that she was done, Clover followed a week later, and Biscuit held out until February before she too went on what I can only describe as a very long sabbatical.",
-      "But this week, everything changed.",
-      "I went out on Tuesday morning expecting nothing and found three eggs in the nesting box. Three. Warm, cream-colored, perfect. I stood there for a full minute just looking at them.",
-      "Chickens are deeply tied to daylight. Their bodies respond to the lengthening days and kick off hormone production that triggers laying. It is one of those quietly miraculous things about keeping backyard birds: your egg production is basically a living calendar.",
-      "Maple has always been my most consistent layer. She is a Buff Orpington, big, golden, gentle, and completely unbothered by the world. Clover is a Silver Laced Wyandotte and far more dramatic. She announced her first spring egg with a full ten-minute song. The neighbors probably think I have a very vocal child.",
-      "Biscuit is a mixed breed I got from a local farm swap, and she continues to be a mystery. Tiny, feisty, incredibly good at finding the one gap in the fence. Her eggs are small and very, very brown.",
-      "If you are heading into your first spring with chickens, the main thing to know is this: be patient, increase their protein slightly, make sure the coop is well ventilated, and they will come back to you. And when they do, it will feel like a small miracle every single time."
-    ],
-    quote: "There is something so quietly wonderful about a fresh egg. It is not just food. It is a small vote of confidence from a creature who does not owe you anything."
-  },
-  {
-    id: 2,
-    title: "Hygge in the Coop: Making Your Flock Feel at Home",
-    date: "April 20, 2026",
-    issue: "Issue No. 11",
-    tag: "Hygge",
-    tagClass: "tag-hygge",
-    bg: "#C8D8C0",
-    excerpt: "The Danish concept of cozy warmth applies to chicken keeping too, as it turns out. Here is what I have learned about making a genuinely comfortable home for backyard birds.",
-    paragraphs: [
-      "Hygge is a Danish and Norwegian concept roughly meaning coziness, warmth, and the feeling of contentment that comes from simple pleasures in good company. A candle. A blanket. A cup of something warm. Your flock of chickens softly clucking in the background.",
-      "When I started thinking seriously about the wellbeing of my girls, I realized I had been thinking about it all wrong. I was approaching the coop as an infrastructure problem: safe, functional, adequate. But chickens are social, curious, surprisingly emotional creatures. They deserve more than adequate.",
-      "Most backyard chicken breeds are hardier than people think. But warmth matters for their mood and their health. I am not talking about artificial heat lamps, which are generally unnecessary and a fire risk for adult birds. I mean deep bedding, good draft protection, and roosting bars at the right height so they can huddle together when they want to.",
-      "A bored chicken is a trouble-making chicken. Pecking order disputes, feather pulling, egg eating: a lot of bad behaviors trace back to boredom. Simple enrichment goes a long way. A head of cabbage hung at eye height, a pile of leaves to scratch through, a log or two to jump on.",
-      "My most successful enrichment addition was a simple dirt bath area with sand and wood ash mixed in. The girls use it every single sunny day. Watching Biscuit throw herself into a sand bath with total abandon is, genuinely, one of the more joyful things I witness regularly.",
-      "Hygge is ultimately about togetherness. Chickens feel this too. They are flock animals and can genuinely suffer from loneliness. Three is my minimum recommendation. Five or six is better. They develop relationships, preferences, and something very much like personalities over time.",
-      "Maple, my eldest, is the steady presence. Clover wants to be wherever Maple is. Biscuit operates as a chaotic independent who occasionally decides to join the group on her own schedule. I find this all deeply relatable."
-    ],
-    quote: "A content chicken is a laying chicken. But beyond the practical, there is something to be said for simply giving a creature a genuinely good life."
-  },
-  {
-    id: 3,
-    title: "Five Books for a Rainy Afternoon In",
-    date: "April 6, 2026",
-    issue: "Issue No. 10",
-    tag: "Good Reads",
-    tagClass: "tag-life",
-    bg: "#DDD5C8",
-    excerpt: "A short stack of books that feel like wrapping yourself in a blanket, warm and quiet and exactly right for when the world outside is grey.",
-    paragraphs: [
-      "It rained all weekend here. Not the dramatic spring storm kind, but the quiet, grey, steady kind that invites you to just stay inside. I made a big pot of soup, lit a candle, and read. And I thought I would share what has been on my nightstand lately.",
-      "These are books for slowing down. None of them are urgent. All of them are, in some way, about paying attention to small things.",
-      "The Art of Noticing by Rob Walker is a gentle little book full of exercises for re-engaging with the world around you. Walker argues, convincingly, that noticing is a skill, one most of us have let go dormant. Perfect for reading in small chunks.",
-      "Braiding Sweetgrass by Robin Wall Kimmerer is part botany, part memoir, part philosophy. Kimmerer writes about plants with such genuine love that you finish the book looking at every tree differently. One of the most beautiful pieces of nature writing I have ever read.",
-      "A Pattern Language by Christopher Alexander is technically a book about architecture, but really a book about how humans need to live. Dense and wonderful. I read it a few pages at a time and find myself thinking about it for days afterward.",
-      "How to Do Nothing by Jenny Odell makes a case for resisting the attention economy and reclaiming your time and focus. Odell is a birdwatcher and writes about birds in a way I find surprisingly moving. She would probably love my chickens.",
-      "Whatever you are reading lately, I would love to hear about it. Hit reply and tell me. The reading recommendations I get from subscribers are consistently my favorite part of running this newsletter."
-    ],
-    quote: "The best rainy afternoon books are the ones that make you feel less alone in caring about small things."
-  },
-  {
-    id: 4,
-    title: "The Only Potato Leek Soup You Need",
-    date: "March 23, 2026",
-    issue: "Issue No. 9",
-    tag: "Recipe",
-    tagClass: "tag-recipe",
-    bg: "#EDD8A0",
-    excerpt: "There are fancier soups. This one is not fancy. It is silky and golden and smells like warmth and it has lived in my weekly rotation for six years.",
-    paragraphs: [
-      "I have been making this soup for six years. I have made it when it was cold and when I was sick and when someone needed feeding and when I just wanted something that tasted like a hug. It never fails me.",
-      "The key is the leeks. You want them very, very soft, past what you think is enough, into the territory of yielding, sweet, collapsing into butter. This takes time. Give it the time.",
-      "Ingredients for four to six servings: four large leeks white and light green parts only, three tablespoons unsalted butter, one and a half pounds Yukon Gold potatoes peeled and diced, four cups good chicken or vegetable stock, one cup whole milk or light cream, salt, white pepper, and fresh chives to finish.",
-      "Slice the leeks into half-moons and rinse them very well, sand hides in every layer. Melt the butter in a heavy pot over medium-low heat, add the leeks with a big pinch of salt, and cook stirring occasionally for at least twenty minutes. They should be utterly soft and golden at the edges.",
-      "Add the potatoes and stock. Bring to a simmer and cook until the potatoes are completely tender, about fifteen minutes. Blend until smooth. Add the cream, taste, and adjust the salt.",
-      "Serve with something crusty. A few snipped chives on top. Eat somewhere comfortable. This is the whole assignment."
-    ],
-    quote: "The difference between a good soup and a great soup is almost always just more time and more salt than you thought."
-  }
-];
+// ── CONFIG ──────────────────────────────────────────────────
+// Your GitHub username and repo name
+var GITHUB_USER = 'chris52085-netizen';
+var GITHUB_REPO = 'Jo-s-Corner';
+var POSTS_FOLDER = '_posts';
 
-function makeCard(p) {
-  var el = document.createElement('div');
-  el.className = 'post-card';
-  el.innerHTML =
-    '<div class="post-card-img" style="background:' + p.bg + ';">' +
-      '<svg viewBox="0 0 60 60" width="60" fill="none"><ellipse cx="28" cy="37" rx="17" ry="13" fill="#B85530" opacity=".35"/><circle cx="43" cy="22" r="9" fill="#B85530" opacity=".35"/><path d="M51 22 L56 20 L51 25Z" fill="#D4A853" opacity=".5"/></svg>' +
-    '</div>' +
-    '<div class="post-card-body">' +
-      '<span class="post-tag ' + p.tagClass + '">' + p.tag + '</span>' +
-      '<div class="card-title">' + p.title + '</div>' +
-      '<div class="card-exc">' + p.excerpt + '</div>' +
-      '<div class="card-meta"><span>' + p.date + '</span><span>Read &amp; comment &rarr;</span></div>' +
-    '</div>';
-  el.onclick = function() { openPost(p.id); };
-  return el;
+// ── CATEGORY STYLES ─────────────────────────────────────────
+var tagClass = {
+  'Backyard Chickens': 'tag-chicken',
+  'Hygge': 'tag-hygge',
+  'Good Reads': 'tag-life',
+  'Recipe': 'tag-recipe',
+  'Life': 'tag-life',
+  'Garden': 'tag-hygge'
+};
+var tagBg = {
+  'Backyard Chickens': '#EDD5B8',
+  'Hygge': '#C8D8C0',
+  'Good Reads': '#DDD5C8',
+  'Recipe': '#EDD8A0',
+  'Life': '#D8D5E8',
+  'Garden': '#D0DCC8'
+};
+
+// ── PARSE FRONTMATTER ────────────────────────────────────────
+function parseFrontmatter(text) {
+  var result = { content: text, data: {} };
+  var match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+  if (!match) return result;
+  result.content = match[2];
+  match[1].split('\n').forEach(function(line) {
+    var idx = line.indexOf(':');
+    if (idx < 1) return;
+    var key = line.slice(0, idx).trim();
+    var val = line.slice(idx + 1).trim().replace(/^["']|["']$/g, '');
+    result.data[key] = val;
+  });
+  return result;
 }
 
+// ── LOAD POSTS FROM GITHUB ───────────────────────────────────
+var allPosts = [];
+
+function loadPosts() {
+  var apiUrl = 'https://api.github.com/repos/' + GITHUB_USER + '/' + GITHUB_REPO + '/contents/' + POSTS_FOLDER;
+
+  fetch(apiUrl)
+    .then(function(r) { return r.json(); })
+    .then(function(files) {
+      if (!Array.isArray(files)) {
+        showEmpty();
+        return;
+      }
+      var mdFiles = files.filter(function(f) {
+        return f.name.endsWith('.md') && f.name !== '.gitkeep';
+      });
+      if (mdFiles.length === 0) {
+        showEmpty();
+        return;
+      }
+      var fetches = mdFiles.map(function(f) {
+        return fetch(f.download_url)
+          .then(function(r) { return r.text(); })
+          .then(function(text) {
+            var parsed = parseFrontmatter(text);
+            return {
+              title:    parsed.data.title    || 'Untitled',
+              date:     parsed.data.date     || '',
+              issue:    parsed.data.issue    || '',
+              category: parsed.data.category || 'Life',
+              excerpt:  parsed.data.excerpt  || '',
+              content:  parsed.content,
+              filename: f.name
+            };
+          });
+      });
+      return Promise.all(fetches);
+    })
+    .then(function(posts) {
+      if (!posts) return;
+      // Sort newest first
+      posts.sort(function(a, b) {
+        return new Date(b.date) - new Date(a.date);
+      });
+      allPosts = posts;
+      renderGrids();
+    })
+    .catch(function() {
+      showEmpty();
+    });
+}
+
+// ── RENDER GRIDS ─────────────────────────────────────────────
 function renderGrids() {
   var hg = document.getElementById('home-grid');
   var ag = document.getElementById('all-grid');
-  posts.slice(0, 3).forEach(function(p) { hg.appendChild(makeCard(p)); });
-  posts.forEach(function(p) { ag.appendChild(makeCard(p)); });
+  hg.innerHTML = '';
+  ag.innerHTML = '';
+
+  if (allPosts.length === 0) {
+    showEmpty();
+    return;
+  }
+
+  allPosts.slice(0, 3).forEach(function(p) { hg.appendChild(makeCard(p)); });
+  allPosts.forEach(function(p) { ag.appendChild(makeCard(p)); });
 }
 
-function openPost(id) {
-  var p = null;
-  for (var i = 0; i < posts.length; i++) { if (posts[i].id === id) { p = posts[i]; break; } }
-  if (!p) return;
+function showEmpty() {
+  var msg = '<div class="empty-msg"><h4>No posts yet</h4><p>New issues will appear here once published through the admin panel.</p></div>';
+  document.getElementById('home-grid').innerHTML = msg;
+  document.getElementById('all-grid').innerHTML = msg;
+}
 
+// ── MAKE A CARD ──────────────────────────────────────────────
+function makeCard(p) {
+  var tc = tagClass[p.category] || 'tag-life';
+  var bg = tagBg[p.category]   || '#DDD5C8';
+
+  var el = document.createElement('div');
+  el.className = 'post-card';
+  el.innerHTML =
+    '<div class="post-card-img" style="background:' + bg + ';">' +
+      '<svg viewBox="0 0 60 60" width="60" fill="none"><ellipse cx="28" cy="37" rx="17" ry="13" fill="#B85530" opacity=".3"/><circle cx="43" cy="22" r="9" fill="#B85530" opacity=".3"/><path d="M51 22 L56 20 L51 25Z" fill="#D4A853" opacity=".5"/></svg>' +
+    '</div>' +
+    '<div class="post-card-body">' +
+      '<span class="post-tag ' + tc + '">' + p.category + '</span>' +
+      '<div class="card-title">' + p.title + '</div>' +
+      '<div class="card-exc">' + (p.excerpt || '') + '</div>' +
+      '<div class="card-meta"><span>' + (p.date || '') + '</span><span>Read &rarr;</span></div>' +
+    '</div>';
+  el.onclick = function() { openPost(p); };
+  return el;
+}
+
+// ── OPEN A POST ──────────────────────────────────────────────
+function openPost(p) {
+  var tc = tagClass[p.category] || 'tag-life';
   var wrap = document.getElementById('post-body');
   wrap.innerHTML = '';
 
   var badge = document.createElement('span');
-  badge.className = 'post-badge ' + p.tagClass;
-  badge.textContent = p.tag;
+  badge.className = 'post-badge ' + tc;
+  badge.textContent = p.category;
   wrap.appendChild(badge);
 
   var h1 = document.createElement('h1');
@@ -786,27 +832,24 @@ function openPost(id) {
 
   var byline = document.createElement('div');
   byline.className = 'post-byline';
-  byline.innerHTML = '<span>By Jo</span><span>&middot;</span><span>' + p.date + '</span><span>&middot;</span><span>' + p.issue + '</span>';
+  byline.innerHTML = '<span>By Jo</span><span>&middot;</span><span>' + (p.date || '') + '</span>' +
+    (p.issue ? '<span>&middot;</span><span>' + p.issue + '</span>' : '');
   wrap.appendChild(byline);
 
   var body = document.createElement('div');
   body.className = 'post-body';
-
-  p.paragraphs.forEach(function(txt, i) {
-    var para = document.createElement('p');
-    para.textContent = txt;
-    body.appendChild(para);
-    if (i === 1 && p.quote) {
-      var bq = document.createElement('blockquote');
-      bq.textContent = p.quote;
-      body.appendChild(bq);
-    }
-  });
-
+  // Use marked.js to render markdown if available, otherwise plain text
+  if (typeof marked !== 'undefined') {
+    body.innerHTML = marked.parse(p.content);
+  } else {
+    body.innerHTML = p.content.replace(/\n\n/g, '</p><p>').replace(/^/, '<p>').replace(/$/, '</p>');
+  }
   wrap.appendChild(body);
+
   nav('post');
 }
 
+// ── NAVIGATION ───────────────────────────────────────────────
 function nav(page) {
   document.querySelectorAll('.page').forEach(function(el) { el.classList.remove('active'); });
   document.querySelectorAll('.nav-links a').forEach(function(el) { el.classList.remove('active'); });
@@ -822,12 +865,12 @@ function toggleHam() {
   document.getElementById('navlinks').classList.toggle('open');
 }
 
+// ── FORM SUBMISSIONS ─────────────────────────────────────────
 function doSignup(e, formId, okId) {
   e.preventDefault();
   var form = document.getElementById(formId);
   var data = new URLSearchParams(new FormData(form)).toString();
-  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: data })
-    .catch(function() {});
+  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: data }).catch(function(){});
   form.style.display = 'none';
   document.getElementById(okId).style.display = 'block';
 }
@@ -836,13 +879,13 @@ function doArticle(e) {
   e.preventDefault();
   var form = document.getElementById('sub-form');
   var data = new URLSearchParams(new FormData(form)).toString();
-  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: data })
-    .catch(function() {});
+  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: data }).catch(function(){});
   form.style.display = 'none';
   document.getElementById('sub-ok').style.display = 'block';
 }
 
-renderGrids();
+// ── START ────────────────────────────────────────────────────
+loadPosts();
 </script>
 </body>
 </html>
