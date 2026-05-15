@@ -1,0 +1,20 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "posts"
+    label: "Newsletter Posts"
+    folder: "_posts"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "datetime", format: "MMMM D, YYYY", date_format: "MMMM D, YYYY", time_format: false}
+      - {label: "Issue Number", name: "issue", widget: "string"}
+      - {label: "Category", name: "category", widget: "select", options: ["Backyard Chickens", "Hygge", "Good Reads", "Recipe", "Life"]}
+      - {label: "Short teaser", name: "excerpt", widget: "text"}
+      - {label: "Article", name: "body", widget: "markdown"}
