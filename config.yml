@@ -1,0 +1,57 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+publish_mode: editorial_workflow
+
+collections:
+  - name: "posts"
+    label: "Newsletter Posts"
+    label_singular: "Post"
+    folder: "_posts"
+    create: true
+    slug: "{{slug}}"
+    preview_path: "/"
+    fields:
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        hint: "The title of your newsletter post"
+
+      - label: "Date"
+        name: "date"
+        widget: "datetime"
+        format: "MMMM D, YYYY"
+        date_format: "MMMM D, YYYY"
+        time_format: false
+        hint: "When this post was published"
+
+      - label: "Issue Number"
+        name: "issue"
+        widget: "string"
+        hint: "e.g. Issue No. 13"
+
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - "Backyard Chickens"
+          - "Hygge"
+          - "Good Reads"
+          - "Recipe"
+          - "Life"
+          - "Garden"
+        default: "Backyard Chickens"
+
+      - label: "Short teaser"
+        name: "excerpt"
+        widget: "text"
+        hint: "1–2 sentences shown on the post card. Keep it cozy and inviting!"
+
+      - label: "Article"
+        name: "body"
+        widget: "markdown"
+        hint: "Write your full post here. Use the toolbar to add headings, bold, quotes, etc."
