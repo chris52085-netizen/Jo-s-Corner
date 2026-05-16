@@ -1,5 +1,6 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: chris52085-netizen/Jo-s-Corner
   branch: main
 
 media_folder: "newsletters"
@@ -17,5 +18,5 @@ collections:
       - {label: "Issue Number", name: "issue", widget: "string"}
       - {label: "Category", name: "category", widget: "select", options: ["Backyard Chickens", "Hygge", "Good Reads", "Recipe", "Life", "Garden"]}
       - {label: "Short teaser", name: "excerpt", widget: "text"}
-      - {label: "Newsletter PDF", name: "pdf", widget: "file", required: false, hint: "Upload the PDF — name it simply with no apostrophes, e.g. jos-corner-issue-12.pdf"}
+      - {label: "Newsletter PDF", name: "pdf", widget: "file", required: false, hint: "Name it simply with no apostrophes e.g. jos-corner-issue-12.pdf"}
       - {label: "Extra notes (optional)", name: "body", widget: "markdown", required: false}
