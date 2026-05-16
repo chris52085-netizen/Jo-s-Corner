@@ -17,6 +17,7 @@
   }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script async src="https://tally.so/widgets/embed.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -407,16 +408,7 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
 </head>
 <body>
 
-<!-- Netlify form detection -->
-<div hidden>
-  <form name="newsletter-signup" netlify netlify-honeypot="bot-field">
-    <input name="bot-field"><input name="name"><input name="email" type="email">
-  </form>
-  <form name="article-submission" netlify netlify-honeypot="bot-field">
-    <input name="bot-field"><input name="name"><input name="email" type="email">
-    <input name="title"><input name="category"><textarea name="pitch"></textarea><textarea name="article"></textarea>
-  </form>
-</div>
+
 
 <!-- NAV -->
 <nav>
@@ -506,15 +498,7 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
     <div class="signup-inner">
       <h3>Join the flock</h3>
       <p>New issues every other Sunday. Chicken updates, cozy reads, and small bits of warmth straight to your inbox.</p>
-      <form id="home-form" onsubmit="doSignup(event,'home-form','home-ok')">
-        <input type="hidden" name="form-name" value="newsletter-signup">
-        <input type="hidden" name="bot-field">
-        <div class="signup-row">
-          <input type="email" name="email" placeholder="your@email.com" required>
-          <button type="submit" class="btn btn-terra">Subscribe free</button>
-        </div>
-      </form>
-      <p id="home-ok" style="display:none;color:#E4B85A;margin-top:1rem;font-size:.9rem;">You are in! Welcome to the flock.</p>
+      <iframe data-tally-src="https://tally.so/embed/gDJ0A1?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="120" frameborder="0" marginheight="0" marginwidth="0" title="Newsletter Signup" style="max-width:500px;"></iframe>
     </div>
   </div>
 </div>
@@ -574,50 +558,7 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
     <h2>Submit a Story</h2>
     <p class="form-lead">Got something to share? A chicken story, a cozy recipe, an essay about slow living? Jo reads every submission and loves hearing from you.</p>
     <div class="form-card">
-      <form id="sub-form" onsubmit="doArticle(event)">
-        <input type="hidden" name="form-name" value="article-submission">
-        <input type="hidden" name="bot-field">
-        <div class="fg-row">
-          <div class="fg">
-            <label>Your name <span class="req">*</span></label>
-            <input type="text" name="name" placeholder="Your name" required>
-          </div>
-          <div class="fg">
-            <label>Your email <span class="req">*</span></label>
-            <input type="email" name="email" placeholder="your@email.com" required>
-          </div>
-        </div>
-        <div class="fg">
-          <label>Story title <span class="req">*</span></label>
-          <input type="text" name="title" placeholder="Give your piece a title" required>
-        </div>
-        <div class="fg">
-          <label>Category</label>
-          <select name="category">
-            <option value="">Pick the closest fit</option>
-            <option>Backyard Chickens</option>
-            <option>Cozy Living and Hygge</option>
-            <option>Recipes and Food</option>
-            <option>Garden and Homestead</option>
-            <option>Good Reads</option>
-            <option>Personal Essay</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label>Short pitch <span class="req">*</span></label>
-          <textarea name="pitch" rows="3" placeholder="A sentence or two about what your piece is about..." required></textarea>
-          <p class="fhint">2 to 3 sentences is perfect.</p>
-        </div>
-        <div class="fg">
-          <label>Your article <span class="req">*</span></label>
-          <textarea name="article" style="min-height:200px;" placeholder="Paste your full article here. Rough drafts welcome!" required></textarea>
-        </div>
-        <div style="margin-top:1.8rem;">
-          <button type="submit" class="btn btn-sage" style="width:100%;justify-content:center;padding:12px;">Send my story</button>
-        </div>
-      </form>
-      <div class="success-box" id="sub-ok">Your story has been sent! Jo will be in touch. Thank you for sharing.</div>
+      <iframe data-tally-src="https://tally.so/embed/VLb08E?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0" title="Submit a Story"></iframe>
     </div>
   </div>
 </div>
@@ -631,24 +572,7 @@ footer { background: #382318; padding: 3rem 2rem 2rem; margin-top: 4rem; }
   </div>
   <div class="form-page" style="padding-top:0;">
     <div class="form-card">
-      <form id="big-sub-form" onsubmit="doSignup(event,'big-sub-form','big-sub-ok')">
-        <input type="hidden" name="form-name" value="newsletter-signup">
-        <input type="hidden" name="bot-field">
-        <div class="fg-row">
-          <div class="fg">
-            <label>First name</label>
-            <input type="text" name="name" placeholder="Jo">
-          </div>
-          <div class="fg">
-            <label>Email address <span class="req">*</span></label>
-            <input type="email" name="email" placeholder="your@email.com" required>
-          </div>
-        </div>
-        <div style="margin-top:1.6rem;">
-          <button type="submit" class="btn btn-terra" style="width:100%;justify-content:center;padding:12px;">Subscribe, it is free</button>
-        </div>
-      </form>
-      <div class="success-box" id="big-sub-ok">You are on the list! Welcome to the flock!</div>
+      <iframe data-tally-src="https://tally.so/embed/gDJ0A1?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="200" frameborder="0" marginheight="0" marginwidth="0" title="Subscribe to Jo's Corner"></iframe>
     </div>
     <div class="sub-cards">
       <div class="sub-card">
@@ -920,25 +844,6 @@ function nav(page) {
 
 function toggleHam() {
   document.getElementById('navlinks').classList.toggle('open');
-}
-
-// ── FORM SUBMISSIONS ─────────────────────────────────────────
-function doSignup(e, formId, okId) {
-  e.preventDefault();
-  var form = document.getElementById(formId);
-  var data = new URLSearchParams(new FormData(form)).toString();
-  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: data }).catch(function(){});
-  form.style.display = 'none';
-  document.getElementById(okId).style.display = 'block';
-}
-
-function doArticle(e) {
-  e.preventDefault();
-  var form = document.getElementById('sub-form');
-  var data = new URLSearchParams(new FormData(form)).toString();
-  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: data }).catch(function(){});
-  form.style.display = 'none';
-  document.getElementById('sub-ok').style.display = 'block';
 }
 
 // ── START ────────────────────────────────────────────────────
